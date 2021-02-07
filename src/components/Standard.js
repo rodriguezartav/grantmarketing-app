@@ -58,6 +58,7 @@ export default function StandardForm(props) {
   return (
     <Create {...props}>
       <SimpleForm>
+        <TextField label={props.resource.toUpperCase()} />
         {keys.map((key) => {
           return getInput(key, data.properties[key]);
         })}
@@ -102,6 +103,7 @@ export function StandardFormEdit(props) {
   return (
     <Edit {...props}>
       <SimpleForm>
+        <TextField label={props.resource.toUpperCase()} />
         {keys.map((key) => {
           return getInput(key, data.properties[key]);
         })}
