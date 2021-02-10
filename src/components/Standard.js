@@ -33,13 +33,14 @@ export default function StandardForm(props) {
   );
 
   function getInput(key, data) {
-    if (data.ui_type == "boolean") return <BooleanInput source={key} />;
+    if (!data.ui_type) data.ui_type = data.type;
+    if (data.ui_type === "boolean") return <BooleanInput source={key} />;
 
-    if (data.ui_type == "number") return <NumberInput source={key} />;
-    if (data.ui_type == "date") return <DateInput source={key} />;
-    if (data.ui_type == "datetime") return <DateTimeInput source={key} />;
+    if (data.ui_type === "number") return <NumberInput source={key} />;
+    if (data.ui_type === "date") return <DateInput source={key} />;
+    if (data.ui_type === "datetime") return <DateTimeInput source={key} />;
 
-    if (data.ui_type == "select")
+    if (data.ui_type === "select")
       return <SelectInput choices={data.choices} source={key} />;
 
     if (data.ui_type == "checkbox")
