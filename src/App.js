@@ -55,6 +55,13 @@ export default function App() {
       <Resource name="script_logs" list={ListGuesser} />
 
       <Resource
+        name="executions"
+        create={StandardForm}
+        edit={StandardFormEdit}
+        list={ListGuesser}
+      />
+
+      <Resource
         name="users"
         create={StandardForm}
         edit={StandardFormEdit}
