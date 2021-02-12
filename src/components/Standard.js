@@ -12,6 +12,7 @@ import {
   BooleanInput,
   DateInput,
   DateTimeInput,
+  ReferenceField,
   ImageInput,
   FileInput,
   CheckboxGroupInput,
@@ -19,8 +20,22 @@ import {
   SelectInput,
   DateField,
   EditButton,
+  List,
+  BooleanField,
 } from "react-admin";
 import useFetch from "react-fetch-hook";
+
+import { cloneElement, useMemo } from "react";
+import PropTypes from "prop-types";
+import {
+  useListContext,
+  TopToolbar,
+  CreateButton,
+  ExportButton,
+  Button,
+  sanitizeListRestProps,
+} from "react-admin";
+import IconEvent from "@material-ui/icons/Event";
 
 export default function StandardForm(props) {
   const { isLoading, data } = useFetch(
@@ -110,5 +125,77 @@ export function StandardFormEdit(props) {
         })}
       </SimpleForm>
     </Edit>
+  );
+}
+
+const ListActions = (props) => {
+  const { className, exporter, filters, maxResults, ...rest } = props;
+  const {
+    currentSort,
+    resource,
+    displayedFilters,
+    filterValues,
+    hasCreate,
+    basePath,
+    selectedIds,
+    showFilter,
+    total,
+  } = useListContext();
+  return (
+    <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
+      {filters &&
+        cloneElement(filters, {
+          resource,
+          showFilter,
+          displayedFilters,
+          filterValues,
+          context: "button",
+        })}
+      <CreateButton basePath={basePath} />
+
+      {/* Add your custom actions */}
+      <Button
+        onClick={() => {
+          alert("Your custom action");
+        }}
+        label="Show calendar"
+      >
+        <IconEvent />
+      </Button>
+    </TopToolbar>
+  );
+};
+
+export function StandardList(props) {
+  const { isLoading, data } = useFetch(
+    process.env.REACT_APP_API_URL + "/api/schemas/" + props.resource
+  );
+
+  if (isLoading) return "loading";
+
+  function getField(key, data) {
+    if (data.ui_type === "reference")
+      return (
+        <ReferenceField
+          label={key.replace("_id", "")}
+          source={key}
+          reference={data.reference}
+        >
+          <TextField source="name" />
+        </ReferenceField>
+      );
+    return <TextField source={key} />;
+  }
+
+  if (!data) return "Not Found";
+
+  return (
+    <List {...props} actions={<ListActions />}>
+      <Datagrid>
+        {data.list.map((key) => {
+          return getField(key, data.properties[key]);
+        })}
+      </Datagrid>
+    </List>
   );
 }
