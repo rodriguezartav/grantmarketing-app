@@ -16,6 +16,8 @@ import {
   ImageInput,
   FileInput,
   CheckboxGroupInput,
+  NumberField,
+  DataTimeField,
   ReferenceInput,
   SelectInput,
   DateField,
@@ -172,28 +174,32 @@ export function StandardList(props) {
   );
 
   if (isLoading) return "loading";
+  const keys = Object.keys(
+    data.list ? data.list.map((item) => data.properties[item]) : data.properties
+  ).filter((item) => ["id", "created_at", "updated_at"].indexOf(item) === -1);
 
-  function getField(key, data) {
-    if (data.ui_type === "reference")
+  function getInput(key, data) {
+    if (!data.ui_type) data.ui_type = data.type;
+    else if (data.ui_type === "boolean") return <BooleanField source={key} />;
+    else if (data.ui_type === "number") return <NumberField source={key} />;
+    else if (data.ui_type === "date") return <DateField source={key} />;
+    else if (data.ui_type === "datetime") return <DateTimeField source={key} />;
+    else if (data.ui_type === "select") return <TextField source={key} />;
+    else if (data.ui_type === "checkbox") return <TextField source={key} />;
+    else if (data.ui_type === "reference")
       return (
-        <ReferenceField
-          label={key.replace("_id", "")}
-          source={key}
-          reference={data.reference}
-        >
+        <ReferenceField label={key} source={key} reference={data.reference}>
           <TextField source="name" />
         </ReferenceField>
       );
-    return <TextField source={key} />;
+    else return <TextField source={key} />;
   }
 
-  if (!data) return "Not Found";
-
   return (
-    <List {...props} actions={<ListActions />}>
+    <List {...props}>
       <Datagrid>
-        {data.list.map((key) => {
-          return getField(key, data.properties[key]);
+        {keys.map((key) => {
+          return getInput(key, data.properties[key]);
         })}
       </Datagrid>
     </List>
