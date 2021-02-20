@@ -174,25 +174,45 @@ export function StandardList(props) {
   );
 
   if (isLoading) return "loading";
-  const keys = Object.keys(
-    data.list ? data.list.map((item) => data.properties[item]) : data.properties
-  ).filter((item) => ["id", "created_at", "updated_at"].indexOf(item) === -1);
+  const keys = data.list
+    ? data.list
+    : Object.keys(data.properties).filter(
+        (item) => ["id", "created_at", "updated_at"].indexOf(item) === -1
+      );
 
   function getInput(key, data) {
     if (!data.ui_type) data.ui_type = data.type;
     else if (data.ui_type === "boolean") return <BooleanField source={key} />;
     else if (data.ui_type === "number") return <NumberField source={key} />;
     else if (data.ui_type === "date") return <DateField source={key} />;
-    else if (data.ui_type === "datetime") return <DateTimeField source={key} />;
+    else if (data.ui_type === "datetime") return <TextField source={key} />;
     else if (data.ui_type === "select") return <TextField source={key} />;
     else if (data.ui_type === "checkbox") return <TextField source={key} />;
     else if (data.ui_type === "reference")
       return (
         <ReferenceField label={key} source={key} reference={data.reference}>
-          <TextField source="name" />
+          <TextField source={data.source || "name"} />
         </ReferenceField>
       );
-    else return <TextField source={key} />;
+    else if (data.ui_type === "deep_reference") {
+      debugger;
+      return (
+        <ReferenceField
+          link={false}
+          label={key}
+          source={key}
+          reference={data.reference}
+        >
+          <ReferenceManyField
+            reference={data.sub_reference}
+            target={data.target || "id"}
+            addLabel={false}
+          >
+            <TextField source={data.source || "name"} />
+          </ReferenceManyField>
+        </ReferenceField>
+      );
+    } else return <TextField source={key} />;
   }
 
   return (
