@@ -195,7 +195,6 @@ export function StandardList(props) {
         </ReferenceField>
       );
     else if (data.ui_type === "deep_reference") {
-      debugger;
       return (
         <ReferenceField
           link={false}
