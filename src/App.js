@@ -21,6 +21,13 @@ export default function App() {
       dataProvider={Data}
     >
       <Resource
+        name="providers"
+        create={StandardForm}
+        edit={StandardFormEdit}
+        list={StandardList}
+      />
+
+      <Resource
         name="customers"
         create={StandardForm}
         edit={StandardFormEdit}
@@ -36,6 +43,13 @@ export default function App() {
 
       <Resource
         name="scripts"
+        create={StandardForm}
+        edit={StandardFormEdit}
+        list={StandardList}
+      />
+
+      <Resource
+        name="script_assignments"
         create={StandardForm}
         edit={StandardFormEdit}
         list={StandardList}

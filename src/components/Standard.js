@@ -46,7 +46,7 @@ export default function StandardForm(props) {
 
   if (isLoading) return "loading";
   const keys = Object.keys(data.properties).filter(
-    (item) => ["id", "created_at", "updated_at"].indexOf(item) == -1
+    (item) => ["id", "created_at", "updated_at"].indexOf(item) !== 0
   );
 
   function getInput(key, data) {
@@ -173,7 +173,7 @@ export function StandardList(props) {
     process.env.REACT_APP_API_URL + "/api/schemas/" + props.resource
   );
 
-  if (isLoading) return "loading";
+  if (isLoading || !data) return "loading";
   const keys = data.list
     ? data.list
     : Object.keys(data.properties).filter(
