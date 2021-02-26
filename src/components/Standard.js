@@ -41,7 +41,7 @@ import IconEvent from "@material-ui/icons/Event";
 
 export default function StandardForm(props) {
   const { isLoading, data } = useFetch(
-    process.env.REACT_APP_API_URL + "/api/schemas/" + props.resource
+    process.env.REACT_APP_API_URL + "/vpi/schemas/" + props.resource
   );
 
   if (isLoading) return "loading";
@@ -87,7 +87,7 @@ export default function StandardForm(props) {
 
 export function StandardFormEdit(props) {
   const { isLoading, data } = useFetch(
-    process.env.REACT_APP_API_URL + "/api/schemas/" + props.resource
+    process.env.REACT_APP_API_URL + "/vpi/schemas/" + props.resource
   );
 
   if (isLoading) return "loading";
@@ -170,7 +170,7 @@ const ListActions = (props) => {
 
 export function StandardList(props) {
   const { isLoading, data } = useFetch(
-    process.env.REACT_APP_API_URL + "/api/schemas/" + props.resource
+    process.env.REACT_APP_API_URL + "/vpi/schemas/" + props.resource
   );
 
   if (isLoading || !data) return "loading";

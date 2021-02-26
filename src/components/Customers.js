@@ -16,7 +16,7 @@ import useFetch from "react-fetch-hook";
 
 export function CustomerCreate(props) {
   const { isLoading, data } = useFetch(
-    process.env.REACT_APP_API_URL + "/api/schemas/" + props.resource
+    process.env.REACT_APP_API_URL + "/vpi/schemas/" + props.resource
   );
 
   if (isLoading) return "loading";
