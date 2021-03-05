@@ -9,6 +9,9 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import Select from "@material-ui/core/Select";
+
+import MenuItem from "@material-ui/core/MenuItem";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -31,10 +34,11 @@ const useStyles = makeStyles((theme) => ({
 
 let apiUrl = process.env.REACT_APP_API_URL + "/api";
 
-export default () => {
+export default function Login() {
   const classes = useStyles();
   const translate = useTranslate();
   const [phone, setPhone] = useState("");
+  const [countryCode, setCountryCode] = useState("+1");
 
   const [code, setCode] = useState("");
   const [phoneView, setPhoneView] = useState(true);
@@ -52,7 +56,7 @@ export default () => {
     e.preventDefault();
     const request = new Request(apiUrl + "/login/getCode", {
       method: "POST",
-      body: JSON.stringify({ phone: phone }),
+      body: JSON.stringify({ countryCode, phone: phone }),
       headers: new Headers({ "Content-Type": "application/json" }),
     });
     return fetch(request)
@@ -74,6 +78,7 @@ export default () => {
       body: JSON.stringify({
         code: code,
         phone: phone,
+        countryCode,
         applicationSid: process.env.REACT_APP_APPLICATION_SID,
         endpoint:
           navigator.userAgent.toLowerCase() +
@@ -115,6 +120,16 @@ export default () => {
         {phoneView ? (
           <Fragment>
             <form onSubmit={send} className={classes.form}>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={countryCode}
+                onChange={(e) => setCountryCode(e.target.value)}
+              >
+                <MenuItem value="+1">+1</MenuItem>
+                <MenuItem value="+506">+506</MenuItem>
+              </Select>
+
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -173,4 +188,4 @@ export default () => {
       <Notification />
     </Container>
   );
-};
+}
